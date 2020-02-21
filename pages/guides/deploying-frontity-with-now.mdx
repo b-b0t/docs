@@ -1,0 +1,134 @@
+import Guide from '~/components/layout/guide'
+import Snippet from '~/components/snippet'
+import Caption from '~/components/text/caption'
+import Link from '~/components/text/link'
+import { Image } from '~/components/media'
+import DeploySection from '~/components/guides/deploy-section'
+
+export const meta = {
+  title: 'Create a Frontity Website and Deploy It with ZEIT Now',
+  description:
+    'Setup a blog with Frontity either as a standalone installation or as a subdirectory of a Next.js project.',
+  published: '2020-02-21T12:00:00.860Z',
+  authors: ['b-b0t'],
+  url: '/guides/deploying-frontity-with-now',
+  example: 'frontity',
+  demo: 'https://frontity-guide.now.sh',
+  image:
+    'https://og-image.now.sh/**Deploying%20Gatsby%20Sites**%20%3Cbr%20%2F%3E%20with%20ZEIT%20Now.png?theme=light&md=1&fontSize=100px&images=https%3A%2F%2Fassets.zeit.co%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fzeit-black-triangle.svg&images=https%3A%2F%2Fcdn.svgporn.com%2Flogos%2Fgatsby.svg',
+  editUrl: 'pages/guides/deploying-frontity-with-now.mdx',
+  name: 'Frontity',
+  type: 'app',
+  lastEdited: '2020-02-21T12:49:00.000Z'
+}
+
+[Frontity](https://frontity.org/) is a free and open source framework to build super fast WordPress themes using React.
+
+## Step 1: Setting up your Frontity project
+
+Firstly, [set up a Frontity project](https://docs.frontity.org/getting-started/quick-start-guide) using the Frontity CLI:
+
+<Snippet dark text="npx frontity create my-app && cd my-app" />
+<Caption>Frontity has it's own CLI so you can just create a new Frontity project with a single command using <Link href="https://www.npmjs.com/package/npx">npx</Link>.</Caption>
+
+An offer to subscribe to framework updates will appear in the terminal and the project will be created.
+
+Replace the URL's in the `frontity.settings.js` file with your WordPress installations URL. This can be configured in a number of ways. Your data should populate in the app when restarting by running `npx frontity dev` in your terminal.
+
+## Step 2: Deploying your Frontity website with ZEIT Now
+
+<DeploySection meta={meta} />
+
+## Bonus: Running a Frontity installation as a subdirectory of a Next.js app
+
+It's possible to use a Frontity installation solely for the purpose of a blog in your existing application. Below are the outlined steps in order to create and deploy a nested Frontity blog in a Next.js project complete with automatic routing.
+
+### Step 1: Create next.js app
+
+Follow the standard [Next.js setup guide](https://nextjs.org/learn/basics/getting-started/setup).
+
+### Step 2: Create Frontity in blog subfolder
+
+<Snippet dark text="npx frontity create blog && cd blog" />
+<Caption>Setup a Frontity project in the root of your Next.js directory inside a `blog` folder.</Caption>
+
+### Step 3: Edit `frontity.settings.js` file
+
+Below is an example of what the file should look like.
+Carefully note the prepended `/blog` on all menu items and `subdirectory: "blog"` under `@frontity/wp-source`.
+
+```
+const settings = {
+  name: "frontity-app",
+  state: {
+    frontity: {
+      url: "https://test.frontity.io",
+      title: "Test Frontity Blog",
+      description: "WordPress installation for Frontity development"
+    }
+  },
+  packages: [
+    {
+      name: "@frontity/mars-theme",
+      state: {
+        theme: {
+          menu: [
+            ["Blog", "/blog/"],
+            ["Nature", "/blog/category/nature/"],
+            ["Travel", "/blog/category/travel/"],
+            ["Japan", "/blog/tag/japan/"],
+            ["About Us", "/blog/about-us/"]
+          ],
+          featured: {
+            showOnList: false,
+            showOnPost: false
+          }
+        }
+      }
+    },
+    {
+      name: "@frontity/wp-source",
+      state: {
+        source: {
+          api: "https://test.frontity.io/wp-json",
+          subdirectory: "blog"
+        }
+      }
+    },
+    "@frontity/tiny-router",
+    "@frontity/html2react"
+  ]
+};
+
+export default settings;
+```
+
+### Step 4: Deploy with Now
+
+Edit your `now.json` file in the Next.js root directory to support both deployments using the official builders.
+
+```
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@now/next"
+    },
+    {
+      "src": "blog/package.json",
+      "use": "@frontity/now"
+    }
+  ]
+}
+```
+
+<Snippet dark text="now" />
+<Caption>Deploy to Now and follow the terminal instrcutions for setting up your new project.</Caption>
+
+
+export default ({ children }) => <Guide meta={meta}>{children}</Guide>
+
+export const config = {
+  amp: 'hybrid'
+}
