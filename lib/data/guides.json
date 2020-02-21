@@ -4,12 +4,13 @@
     "description": "Setup a blog with Frontity either as a standalone installation or as a subdirectory of a Next.js project.",
     "published": "2020-02-21T12:00:00.860Z",
     "authors": ["b-b0t"],
+    "url": "/guides/deploying-frontity-with-now",
+    "example": "frontity",
+    "demo": "https://frontity-guide.now.sh",
+    "editUrl": "pages/guides/deploying-frontity-with-now.mdx",
     "name": "Frontity",
     "type": "app",
-    "demo": "https://frontity-guide.now.sh",
-    "url": "/guides/deploying-frontity-with-now",
-    "editUrl": "pages/guides/deploying-frontity-with-now.mdx",
-    "lastEdited": "2020-02-21T20:54:16.000Z"
+    "lastEdited": "2020-02-21T13:20:26.000Z"
   },
   {
     "title": "Create and Deploy Vue.js Forms using Formcarry with ZEIT Now",
